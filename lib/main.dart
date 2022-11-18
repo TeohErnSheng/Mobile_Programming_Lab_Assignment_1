@@ -37,6 +37,131 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+class _HomePageState extends State<HomePage> {
+  TextEditingController movieName = TextEditingController();
+  var poster = " ";
+  var title = "";
+  var year = "";
+  var rated = "";
+  var released = "";
+  var runtime = "";
+  var genre = "";
+  var director = "";
+  var writers = "";
+  var actors = "";
+  var plot = "";
+  var language = "";
+  var country = "";
+  var awards = "";
+  var ratingSource1 = "";
+  var ratingImdb = "";
+  var ratingSource2 = "";
+  var ratingRotten = "";
+  var ratingSource3 = "";
+  var ratingMeta = "";
+
+  Movie currentMovie = Movie(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
+      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+
+  Future<void> _loadMovie(String search) async {
+    ProgressDialog progressDialog = ProgressDialog(context,
+        message: const Text("Progress"), title: const Text("Searching..."));
+    progressDialog.show();
+    var url = Uri.parse('http://www.omdbapi.com/?t=$search&apikey=b272db94');
+    var response = await http.get(url);
+    var rescode = response.statusCode;
+    if (rescode == 200) {
+      setState(() {
+        var jsonData = response.body;
+        var parsedJson = json.decode(jsonData);
+        poster = parsedJson['Poster'];
+        title = parsedJson['Title'];
+        year = parsedJson['Year'];
+        rated = parsedJson['Rated'];
+        released = parsedJson['Released'];
+        runtime = parsedJson['Runtime'];
+        genre = parsedJson['Genre'];
+        director = parsedJson['Director'];
+        writers = parsedJson['Writer'];
+        actors = parsedJson['Actors'];
+        plot = parsedJson['Plot'];
+        language = parsedJson['Language'];
+        country = parsedJson['Country'];
+        awards = parsedJson['Awards'];
+        ratingSource1 = parsedJson['Ratings'][0]['Source'];
+        ratingImdb = parsedJson['Ratings'][0]['Value'];
+        ratingSource2 = parsedJson['Ratings'][1]['Source'];
+        ratingRotten = parsedJson['Ratings'][1]['Value'];
+        ratingSource3 = parsedJson['Ratings'][2]['Source'];
+        ratingMeta = parsedJson['Ratings'][2]['Value'];
+        currentMovie = Movie(
+            poster,
+            title,
+            year,
+            rated,
+            released,
+            runtime,
+            genre,
+            director,
+            writers,
+            actors,
+            plot,
+            language,
+            country,
+            awards,
+            ratingSource1,
+            ratingImdb,
+            ratingSource2,
+            ratingRotten,
+            ratingSource3,
+            ratingMeta);
+        progressDialog.dismiss();
+        Fluttertoast.showToast(
+            msg: "Movie Found",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            fontSize: 20.0);
+      });
+    } else {
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Text("Enter Movie Name: ", style: TextStyle(fontSize: 18)),
+          const SizedBox(height: 10),
+          TextField(
+            controller: movieName,
+            style: const TextStyle(fontSize: 18),
+            decoration: const InputDecoration(border: OutlineInputBorder()),
+          ),
+          const SizedBox(height: 10),
+          MaterialButton(
+              color: Colors.green,
+              onPressed: () {
+                _loadMovie(movieName.text);
+              },
+              child: const Text(
+                "Load Movie Info",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              )),
+          const SizedBox(height: 20),
+          Expanded(
+            child: MovieGrid(
+              currentMovie: currentMovie,
+            ),
+          ),
+        ])));
+  }
+}
+
 class MovieGrid extends StatefulWidget {
   final Movie currentMovie;
   const MovieGrid({Key? key, required this.currentMovie}) : super(key: key);
@@ -287,130 +412,5 @@ class _MovieGridState extends State<MovieGrid> {
         ),
       ],
     );
-  }
-}
-
-class _HomePageState extends State<HomePage> {
-  TextEditingController movieName = TextEditingController();
-  var poster = " ";
-  var title = "";
-  var year = "";
-  var rated = "";
-  var released = "";
-  var runtime = "";
-  var genre = "";
-  var director = "";
-  var writers = "";
-  var actors = "";
-  var plot = "";
-  var language = "";
-  var country = "";
-  var awards = "";
-  var ratingSource1 = "";
-  var ratingImdb = "";
-  var ratingSource2 = "";
-  var ratingRotten = "";
-  var ratingSource3 = "";
-  var ratingMeta = "";
-
-  Movie currentMovie = Movie(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
-      " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-
-  Future<void> _loadMovie(String search) async {
-    ProgressDialog progressDialog = ProgressDialog(context,
-        message: const Text("Progress"), title: const Text("Searching..."));
-    progressDialog.show();
-    var url = Uri.parse('http://www.omdbapi.com/?t=$search&apikey=b272db94');
-    var response = await http.get(url);
-    var rescode = response.statusCode;
-    if (rescode == 200) {
-      setState(() {
-        var jsonData = response.body;
-        var parsedJson = json.decode(jsonData);
-        poster = parsedJson['Poster'];
-        title = parsedJson['Title'];
-        year = parsedJson['Year'];
-        rated = parsedJson['Rated'];
-        released = parsedJson['Released'];
-        runtime = parsedJson['Runtime'];
-        genre = parsedJson['Genre'];
-        director = parsedJson['Director'];
-        writers = parsedJson['Writer'];
-        actors = parsedJson['Actors'];
-        plot = parsedJson['Plot'];
-        language = parsedJson['Language'];
-        country = parsedJson['Country'];
-        awards = parsedJson['Awards'];
-        ratingSource1 = parsedJson['Ratings'][0]['Source'];
-        ratingImdb = parsedJson['Ratings'][0]['Value'];
-        ratingSource2 = parsedJson['Ratings'][1]['Source'];
-        ratingRotten = parsedJson['Ratings'][1]['Value'];
-        ratingSource3 = parsedJson['Ratings'][2]['Source'];
-        ratingMeta = parsedJson['Ratings'][2]['Value'];
-        currentMovie = Movie(
-            poster,
-            title,
-            year,
-            rated,
-            released,
-            runtime,
-            genre,
-            director,
-            writers,
-            actors,
-            plot,
-            language,
-            country,
-            awards,
-            ratingSource1,
-            ratingImdb,
-            ratingSource2,
-            ratingRotten,
-            ratingSource3,
-            ratingMeta);
-        progressDialog.dismiss();
-        Fluttertoast.showToast(
-            msg: "Movie Found",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            fontSize: 20.0);
-      });
-    } else {
-      setState(() {});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text("Enter Movie Name: ", style: TextStyle(fontSize: 18)),
-          const SizedBox(height: 10),
-          TextField(
-            controller: movieName,
-            style: const TextStyle(fontSize: 18),
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-          ),
-          const SizedBox(height: 10),
-          MaterialButton(
-              color: Colors.green,
-              onPressed: () {
-                _loadMovie(movieName.text);
-              },
-              child: const Text(
-                "Load Movie Info",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )),
-          const SizedBox(height: 20),
-          Expanded(
-            child: MovieGrid(
-              currentMovie: currentMovie,
-            ),
-          ),
-        ])));
   }
 }
