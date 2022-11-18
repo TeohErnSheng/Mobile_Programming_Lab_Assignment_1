@@ -192,6 +192,20 @@ class _MovieGridState extends State<MovieGrid> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.image_outlined,
+                    size: 32,
+                  ),
+                  Text(
+                    "Movie Poster",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
               Image.network(
                 widget.currentMovie.poster,
                 height: 150,
@@ -203,9 +217,6 @@ class _MovieGridState extends State<MovieGrid> {
                       'assets/images/test.jpeg');
                 },
               ),
-              const SizedBox(height: 5),
-              const Text("Movie Poster",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             ],
           ),
         ),
@@ -274,7 +285,7 @@ class _MovieGridState extends State<MovieGrid> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(
-                    Icons.info_outline,
+                    Icons.details_outlined,
                     size: 32,
                   ),
                   Text("Movie Details",
@@ -318,7 +329,7 @@ class _MovieGridState extends State<MovieGrid> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(
-                    Icons.info_outline,
+                    Icons.person_outline,
                     size: 32,
                   ),
                   Text("Credits",
@@ -354,7 +365,7 @@ class _MovieGridState extends State<MovieGrid> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(
-                    Icons.info_outline,
+                    Icons.notes_outlined,
                     size: 32,
                   ),
                   Text("Plot",
@@ -384,7 +395,7 @@ class _MovieGridState extends State<MovieGrid> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Icon(
-                    Icons.info_outline,
+                    Icons.rate_review_outlined,
                     size: 32,
                   ),
                   Text("Ratings",
