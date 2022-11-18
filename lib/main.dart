@@ -63,9 +63,46 @@ class _HomePageState extends State<HomePage> {
   Movie currentMovie = Movie(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
       " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
 
+  void _confirmDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: const Text(
+            "Search Movie",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            "Are you sure you want to search for ${movieName.text} ?",
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Yes",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                _loadMovie(movieName.text);
+              },
+            ),
+            TextButton(
+              child: const Text("No",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _loadMovie(String search) async {
     ProgressDialog progressDialog = ProgressDialog(context,
-        message: const Text("Progress"), title: const Text("Searching..."));
+        message: const Text("Searching in Progress"),
+        title: const Text("Searching..."));
     progressDialog.show();
     var url = Uri.parse('http://www.omdbapi.com/?t=$search&apikey=b272db94');
     var response = await http.get(url);
@@ -123,6 +160,7 @@ class _HomePageState extends State<HomePage> {
             timeInSecForIosWeb: 1,
             fontSize: 20.0);
       });
+      Navigator.of(context).pop();
     } else {
       setState(() {});
     }
@@ -146,7 +184,7 @@ class _HomePageState extends State<HomePage> {
           MaterialButton(
               color: Colors.green,
               onPressed: () {
-                _loadMovie(movieName.text);
+                _confirmDialog();
               },
               child: const Text(
                 "Load Movie Info",
